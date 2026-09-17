@@ -11,6 +11,28 @@ import { Roulette } from './roulette/Roulette';
 // liquid-glass-js (vendored) samples the page with html2canvas.
 (window as unknown as { html2canvas: typeof html2canvas }).html2canvas = html2canvas;
 
+// @shadergradient/react declares preserveDrawingBuffer but its published build
+// never applies it, so html2canvas cannot read the gradient canvas. Force the
+// attribute on every WebGL context this page creates.
+const originalGetContext = HTMLCanvasElement.prototype.getContext;
+HTMLCanvasElement.prototype.getContext = function patchedGetContext(
+	this: HTMLCanvasElement,
+	type: string,
+	attributes?: unknown,
+) {
+	if (type === 'webgl' || type === 'webgl2' || type === 'experimental-webgl') {
+		return originalGetContext.call(this, type as 'webgl', {
+			...(attributes as object | undefined),
+			preserveDrawingBuffer: true,
+		});
+	}
+	return originalGetContext.call(
+		this,
+		type as '2d',
+		attributes as CanvasRenderingContext2DSettings,
+	);
+} as typeof HTMLCanvasElement.prototype.getContext;
+
 type Mode = 'home' | 'pick';
 
 function GradientBackdrop() {
@@ -23,19 +45,18 @@ function GradientBackdrop() {
 			<ShaderGradient
 				control="props"
 				type="plane"
-				animate="on"
-				uSpeed={0.28}
-				uStrength={3.4}
-				uDensity={1.1}
-				uFrequency={4.2}
-				uAmplitude={1.4}
-				color1="#7ce7ff"
-				color2="#ff8fd6"
-				color3="#0b1020"
-				brightness={1.05}
-				grain="on"
-				grainBlending={0.28}
-				reflection={0.12}
+				animate="off"
+				uSpeed={0.1}
+				uStrength={1.1}
+				uDensity={0.8}
+				uFrequency={2}
+				uAmplitude={0.5}
+				color1="#0d1420"
+				color2="#131a2b"
+				color3="#05070f"
+				brightness={0.5}
+				grain="off"
+				reflection={0}
 			/>
 		</ShaderGradientCanvas>
 	);

@@ -8,9 +8,9 @@ type RouletteProps = {
 	onSpun: () => void;
 };
 
-const CARD_WIDTH = 2.3;
-const CARD_HEIGHT = 1.15;
-const RING_RADIUS = 3.5;
+const CARD_WIDTH = 2;
+const CARD_HEIGHT = 1;
+const RING_RADIUS = 4.3;
 
 function roundedRect(
 	ctx: CanvasRenderingContext2D,
@@ -141,7 +141,7 @@ function Ring({ names, spinning, onSpun }: RouletteProps) {
 	const count = Math.max(names.length, 1);
 
 	return (
-		<group ref={group}>
+		<group ref={group} rotation={[0.34, 0, 0]}>
 			<mesh rotation={[Math.PI / 2, 0, 0]}>
 				<torusGeometry args={[RING_RADIUS, 0.035, 16, 120]} />
 				<meshBasicMaterial color="#7ce7ff" transparent opacity={0.5} />
@@ -166,7 +166,7 @@ export function Roulette(props: RouletteProps) {
 	return (
 		<Canvas
 			dpr={[1, 1.8]}
-			camera={{ position: [0, 0.9, 8.2], fov: 44 }}
+			camera={{ position: [0, 3.1, 11.6], fov: 42 }}
 			gl={{ antialias: true, alpha: true }}>
 			<Ring {...props} />
 		</Canvas>

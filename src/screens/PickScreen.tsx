@@ -52,15 +52,21 @@ export function PickScreen() {
 			.then(([picked, pool]) => {
 				winnerRef.current = picked;
 
-				const names = pool.map(restaurant => restaurant.name);
-				const ring = names.slice(0, RING_SIZE);
-				if (!ring.includes(picked.name)) {
-					ring.unshift(picked.name);
+				// Shuffle so the wheel shows a varied mix, with the winner pinned in.
+				const shuffled = pool
+					.map(restaurant => restaurant.name)
+					.filter(name => name !== picked.name);
+
+				for (let i = shuffled.length - 1; i > 0; i -= 1) {
+					const j = Math.floor(Math.random() * (i + 1));
+					[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
 				}
+
+				const ring = [picked.name, ...shuffled.slice(0, RING_SIZE - 1)];
 
 				webRef.current?.send({
 					type: 'candidates',
-					names: ring.slice(0, RING_SIZE),
+					names: ring,
 					winner: picked.name,
 				});
 			})

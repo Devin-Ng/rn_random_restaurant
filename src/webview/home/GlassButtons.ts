@@ -23,13 +23,13 @@ export function mountGlassButtons(host: HTMLElement): () => void {
 	try {
 		const container = new Container({
 			type: 'pill',
-			borderRadius: 46,
+			borderRadius: 28,
 			tintOpacity: 0.26,
 		});
 
 		const pickButton = new Button({
 			text: 'Pick a restaurant',
-			size: 20,
+			size: 15,
 			type: 'pill',
 			tintOpacity: 0.42,
 			warp: true,
@@ -38,7 +38,7 @@ export function mountGlassButtons(host: HTMLElement): () => void {
 
 		const filterButton = new Button({
 			text: 'Filters',
-			size: 20,
+			size: 15,
 			type: 'pill',
 			tintOpacity: 0.24,
 			onClick: () => postToNative({ type: 'action', action: 'filters' }),
