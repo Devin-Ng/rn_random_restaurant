@@ -1,0 +1,138 @@
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+	background: #05070f;
+	overflow: hidden;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+	color: #f5f7ff;
+	-webkit-font-smoothing: antialiased;
+}
+
+#root {
+	position: fixed;
+	inset: 0;
+}
+
+.gradient-canvas {
+	position: absolute;
+	inset: 0;
+}
+
+.gradient-canvas canvas {
+	display: block;
+	width: 100% !important;
+	height: 100% !important;
+}
+
+.home {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	padding: 9vh 24px 6vh;
+	text-align: center;
+}
+
+.logo-wrap {
+	width: min(58vw, 240px);
+	aspect-ratio: 1 / 1;
+	position: relative;
+}
+
+.logo-wrap canvas {
+	display: block;
+	width: 100% !important;
+	height: 100% !important;
+}
+
+.home-kicker {
+	font-size: 12px;
+	letter-spacing: 0.42em;
+	text-transform: uppercase;
+	color: rgba(245, 247, 255, 0.62);
+}
+
+.home-sub {
+	font-size: 13px;
+	line-height: 1.6;
+	color: rgba(245, 247, 255, 0.45);
+	max-width: 300px;
+	margin: 10px auto 0;
+}
+
+.glass-host {
+	min-height: 84px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.pick {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
+.pick-canvas {
+	position: absolute;
+	inset: 0;
+}
+
+.pick-canvas canvas {
+	display: block;
+	touch-action: none;
+}
+
+.pick-kicker {
+	position: absolute;
+	top: 11vh;
+	width: 100%;
+	text-align: center;
+	font-size: 12px;
+	letter-spacing: 0.34em;
+	text-transform: uppercase;
+	color: rgba(245, 247, 255, 0.5);
+}
+
+.pick-name {
+	position: absolute;
+	bottom: 13vh;
+	width: 100%;
+	padding: 0 32px;
+	text-align: center;
+	font-size: 27px;
+	font-weight: 800;
+	letter-spacing: -0.01em;
+	text-shadow: 0 8px 34px rgba(0, 0, 0, 0.65);
+	transition: opacity 0.35s ease;
+}
+
+.pick-name.is-spinning {
+	opacity: 0.55;
+}
+
+.pick-name.is-winner {
+	background: linear-gradient(92deg, #7ce7ff 0%, #ffd479 48%, #ff8fd6 100%);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+
+.pick-hint {
+	position: absolute;
+	bottom: 8vh;
+	width: 100%;
+	text-align: center;
+	font-size: 12px;
+	color: rgba(245, 247, 255, 0.4);
+}
