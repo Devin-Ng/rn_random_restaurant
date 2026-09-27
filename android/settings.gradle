@@ -1,6 +1,43 @@
 pluginManagement { includeBuild("../node_modules/@react-native/gradle-plugin") }
 plugins { id("com.facebook.react.settings") }
-extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> ex.autolinkLibrariesFromCommand() }
+extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
+    // Use the installed CLI, never an npx download or a different global CLI.
+    // RN's default cache tracks the requested dependencies, but not npm's
+    // installed tree. Refresh after npm ci even if package.json is unchanged.
+    ex.autolinkLibrariesFromCommand(
+        ["node", file("../node_modules/@react-native-community/cli/build/bin.js").absolutePath, "config"],
+        file(".."),
+        settings.layout.rootDirectory.dir("../").files(
+            "package.json",
+            "package-lock.json",
+            "node_modules/.package-lock.json",
+            "react-native.config.js",
+            "android/settings.gradle"
+        )
+    )
+
+    // Missing native modules otherwise permit a successful but unusable APK.
+    // Keep registration automatic; never patch generated PackageList.java.
+    def configFile = file("build/generated/autolinking/autolinking.json")
+    def config = new groovy.json.JsonSlurper().parse(configFile)
+    def requiredNativeModules = [
+        "react-native-gesture-handler",
+        "react-native-reanimated",
+        "react-native-worklets",
+        "react-native-svg"
+    ]
+    def missing = requiredNativeModules.findAll { name ->
+        def android = config.dependencies?.get(name)?.platforms?.android
+        !android?.sourceDir || !android?.packageInstance
+    }
+    if (!missing.isEmpty()) {
+        throw new GradleException(
+            "RR Android autolinking is missing: ${missing.join(', ')}. " +
+            "Run npm ci in rn_random_restaurant, then rebuild. " +
+            "If this persists, inspect the local CLI config before launching the app."
+        )
+    }
+}
 rootProject.name = 'RR'
 include ':app'
 includeBuild('../node_modules/@react-native/gradle-plugin')
